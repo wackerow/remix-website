@@ -1,3 +1,4 @@
+import { IntlProvider } from 'react-intl'
 import { ScrollingProvider } from "./scroll-section";
 
 import Navbar from "./components/layout/Navbar";
@@ -13,28 +14,38 @@ import Team from "./components/sections/Team";
 
 import { useColorContinuity } from "./hooks/useColorContinuity";
 import { useColorMode } from "./hooks/useColorMode";
+import { LOCALES } from './constants'
+import { useIntl } from './hooks/useIntl';
 
 function App() {
-    const colorState = useColorMode()
+    const intlState = useIntl()
+    const { code, messages } = intlState.locale
 
+    const colorState = useColorMode()
     useColorContinuity(colorState.setColorMode)
 
     return (
-        <div className="mx-auto">
-            <ScrollingProvider>
-                <Navbar colorState={colorState} />
-                <SubNavbar />
-                <About />
-                <RemixIde />
-                <Plugins colorMode={colorState.colorMode} />
-                <Libraries />
-                <Events />
-                <Rewards />
-                <Team />
-                <Footer colorMode={colorState.colorMode} />
-            </ScrollingProvider>
-        </div>
-    );
+        <IntlProvider locale={code} messages={messages}>
+            <div className="mx-auto">
+                <ScrollingProvider>
+                    <Navbar
+                        intlState={intlState}
+                        locales={LOCALES}
+                        colorState={colorState}
+                    />
+                    <SubNavbar />
+                    <About />
+                    <RemixIde />
+                    <Plugins colorMode={colorState.colorMode} />
+                    <Libraries />
+                    <Events />
+                    <Rewards />
+                    <Team />
+                    <Footer colorMode={colorState.colorMode} />
+                </ScrollingProvider>
+            </div>
+        </IntlProvider>
+    )
 }
 
 export default App;
